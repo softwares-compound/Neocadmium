@@ -77,3 +77,8 @@ print-tree:
 	@echo "Generating filtered directory tree..."
 	@tree -I "node_modules|venv|__pycache__" | tee directory_tree.txt | pbcopy
 	@echo "Directory tree copied to clipboard and saved to 'directory_tree.txt'."
+
+.PHONY: install-dependencies
+install-dependencies:
+	@echo "Running dependency installation script..."
+	@bash scripts/install_dependencies.sh
