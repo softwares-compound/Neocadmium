@@ -19,7 +19,7 @@ setup-venv:
 	@if [ ! -d "$(VENV_DIR)" ]; then $(PYTHON) -m venv $(VENV_DIR); fi
 	@echo "Installing Python dependencies..."
 	@$(PIP) install --upgrade pip
-	@$(PIP) install -r $(AI_SERVICE_DIR)/requirements.in
+	@$(PIP) install -r $(AI_SERVICE_DIR)dev-requirements.in
 
 # Install Node.js dependencies for Electron App
 .PHONY: install-node-modules
