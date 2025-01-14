@@ -70,3 +70,10 @@ clean:
 	@rm -rf $(ELECTRON_DIR)/node_modules
 	@for dir in $(SHARED_DIRS); do rm -rf $$dir/*; done
 	@echo "Clean up completed!"
+
+# Generate a directory tree excluding node_modules, venv, and __pycache__
+.PHONY: print-tree
+print-tree:
+	@echo "Generating filtered directory tree..."
+	@tree -I "node_modules|venv|__pycache__" | tee directory_tree.txt | pbcopy
+	@echo "Directory tree copied to clipboard and saved to 'directory_tree.txt'."

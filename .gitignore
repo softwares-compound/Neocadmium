@@ -33,13 +33,14 @@ desktop.ini         # Windows desktop file
 
 # Environment files
 .env                # Environment variables file
+venv/
 
 # Temporary files
 *.tmp               # Temporary files
 *.bak               # Backup files
 *.swp               # Swap files
 *.swo               # Swap files
-
+directory_tree.txt  # Directory tree file
 # Logs
 *.log               # Log files
 ollama.log          # Ollama service log
