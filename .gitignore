@@ -1,0 +1,50 @@
+# Python-related
+env/                # Virtual environment
+*.pyc               # Compiled Python files
+__pycache__/        # Python cache
+*.pyo               # Optimized Python bytecode
+*.pyd               # Windows dynamic link libraries for Python
+*.pdb               # Python debugger files
+*.egg-info/         # Egg metadata
+*.eggs              # Python package directories
+*.log               # Log files
+
+# Node.js-related
+node_modules/       # Node.js dependencies
+npm-debug.log*      # Debug log
+yarn-error.log*     # Yarn error log
+package-lock.json   # Lock files (optional, if you don't want to commit them)
+
+# Shared directories
+target-codebases/   # Shared target codebase directory
+db/                 # Shared database directory (adjust as necessary)
+
+# Build artifacts
+*.dist              # Nuitka distribution files
+*.build             # Build files
+bin/                # Output directory for compiled binaries
+
+# OS-specific
+.DS_Store           # macOS files
+Thumbs.db           # Windows thumbnail cache
+desktop.ini         # Windows desktop file
+.idea/              # JetBrains IDE configs
+.vscode/            # VS Code configs
+
+# Environment files
+.env                # Environment variables file
+
+# Temporary files
+*.tmp               # Temporary files
+*.bak               # Backup files
+*.swp               # Swap files
+*.swo               # Swap files
+
+# Logs
+*.log               # Log files
+ollama.log          # Ollama service log
+
+# Coverage
+.coverage           # Coverage report
+coverage.xml        # Coverage report XML
+htmlcov/            # HTML coverage output
