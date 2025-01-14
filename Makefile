@@ -1,8 +1,11 @@
-# Define directories and files
+# Variables
 VENV_DIR = venv
-SHARED_DIRS = target-codebases db
-ELECTRON_DIR = electron-app
 AI_SERVICE_DIR = ai-service
+PYTHON = $(VENV_DIR)/bin/python
+PIP = $(VENV_DIR)/bin/pip
+ELECTRON_DIR = electron-app
+ELECTRON_FRONTEND_DIR = $(ELECTRON_DIR)/cadmium-frontend
+
 
 # Define Python and Node.js commands
 PYTHON = python3
@@ -22,7 +25,9 @@ setup-venv:
 .PHONY: install-node-modules
 install-node-modules:
 	@echo "Installing Node.js dependencies..."
-	@cd $(ELECTRON_DIR) && $(NPM) install
+	@cd $(ELECTRON_DIR) && $(NPM) install && $(NPM) install --save-dev vite @vitejs/plugin-react
+	@cd $(ELECTRON_FRONTEND_DIR) && $(NPM) install 
+
 
 # Create shared directories
 .PHONY: create-shared-dirs
@@ -41,18 +46,21 @@ init: setup-venv install-node-modules create-shared-dirs
 .PHONY: start-ai-service
 start-ai-service:
 	@echo "Starting AI Service..."
-	@source $(VENV_DIR)/bin/activate && cd $(AI_SERVICE_DIR) && $(PYTHON) app/main.py
+	@. $(VENV_DIR)/bin/activate && PYTHONPATH=$(shell pwd)/$(AI_SERVICE_DIR) $(PYTHON) $(AI_SERVICE_DIR)/app/main.py
+
 
 # Start Electron App
 .PHONY: start-electron-app
 start-electron-app:
 	@echo "Starting Electron App..."
-	@cd $(ELECTRON_DIR) && $(NPM) start
+	@cd $(ELECTRON_DIR) && $(NPM) run dev
 
 # Start both services
 .PHONY: start-all
-start-all: start-ai-service start-electron-app
-	@echo "Both services started!"
+start-all:
+	@echo "Starting both services concurrently..."
+	@(. $(VENV_DIR)/bin/activate && PYTHONPATH=$(shell pwd)/$(AI_SERVICE_DIR) $(PYTHON) $(AI_SERVICE_DIR)/app/main.py) & \
+	(cd $(ELECTRON_DIR) && $(NPM) start)
 
 # Clean up environment
 .PHONY: clean
