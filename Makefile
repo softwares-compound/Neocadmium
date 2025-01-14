@@ -28,7 +28,6 @@ install-node-modules:
 	@cd $(ELECTRON_DIR) && $(NPM) install && $(NPM) install --save-dev vite @vitejs/plugin-react
 	@cd $(ELECTRON_FRONTEND_DIR) && $(NPM) install 
 
-
 # Create shared directories
 .PHONY: create-shared-dirs
 create-shared-dirs:
@@ -42,12 +41,23 @@ create-shared-dirs:
 init: setup-venv install-node-modules create-shared-dirs
 	@echo "Environment setup completed!"
 
+# Ensure Ollama is running
+.PHONY: ensure-ollama
+ensure-ollama:
+	@echo "Checking if Ollama is running..."
+	@if ! pgrep -x "ollama" > /dev/null; then \
+		echo "Starting Ollama..."; \
+		ollama start & \
+		sleep 2; \
+	else \
+		echo "Ollama is already running."; \
+	fi
+
 # Start AI Service
 .PHONY: start-ai-service
-start-ai-service:
+start-ai-service: ensure-ollama
 	@echo "Starting AI Service..."
 	@. $(VENV_DIR)/bin/activate && PYTHONPATH=$(shell pwd)/$(AI_SERVICE_DIR) $(PYTHON) $(AI_SERVICE_DIR)/app/main.py
-
 
 # Start Electron App
 .PHONY: start-electron-app
@@ -59,7 +69,8 @@ start-electron-app:
 .PHONY: start-all
 start-all:
 	@echo "Starting both services concurrently..."
-	@(. $(VENV_DIR)/bin/activate && PYTHONPATH=$(shell pwd)/$(AI_SERVICE_DIR) $(PYTHON) $(AI_SERVICE_DIR)/app/main.py) & \
+	@make ensure-ollama && \
+	(. $(VENV_DIR)/bin/activate && PYTHONPATH=$(shell pwd)/$(AI_SERVICE_DIR) $(PYTHON) $(AI_SERVICE_DIR)/app/main.py) & \
 	(cd $(ELECTRON_DIR) && $(NPM) start)
 
 # Clean up environment
@@ -78,6 +89,7 @@ print-tree:
 	@tree -I "node_modules|venv|__pycache__" | tee directory_tree.txt | pbcopy
 	@echo "Directory tree copied to clipboard and saved to 'directory_tree.txt'."
 
+# Install dependencies via script
 .PHONY: install-dependencies
 install-dependencies:
 	@echo "Running dependency installation script..."
