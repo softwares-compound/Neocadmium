@@ -7,6 +7,13 @@ Originally conceived as a personal development tool, Cadmium has evolved into a 
 
 ---
 
+## **Video Demo**
+Check out Cadmium in action in this demo video:
+
+[![Cadmium at Work](https://img.youtube.com/vi/dBCNhqX9KmI/0.jpg)](https://youtu.be/dBCNhqX9KmI?feature=shared)
+
+---
+
 ## **Key Features**
 - **Intelligent Log Analysis**:
   - Graph-based traversal for pinpointing errors in large codebases.
@@ -38,13 +45,6 @@ Originally conceived as a personal development tool, Cadmium has evolved into a 
 ├── Makefile            # Automates environment setup and application start
 ├── README.md           # Project documentation
 ```
-
----
-
-## **Project Goals**
-1. Create a **society of intelligent agents** that collaborate to resolve development challenges.
-2. Democratize backend tools with **free access** and **native performance**.
-3. Build a **modular and extensible system** for error analysis and AI-driven insights.
 
 ---
 
