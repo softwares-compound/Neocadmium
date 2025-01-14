@@ -5,9 +5,10 @@ PYTHON = $(VENV_DIR)/bin/python
 PIP = $(VENV_DIR)/bin/pip
 ELECTRON_DIR = electron-app
 ELECTRON_FRONTEND_DIR = $(ELECTRON_DIR)/cadmium-frontend
+COMPILED_BACKEND_DIR = $(ELECTRON_DIR)/compiled-backend
+BIN_DIR = bin  # Output directory for compiled backend
 
-
-# Define Python and Node.js commands
+# Commands
 PYTHON = python3
 PIP = $(VENV_DIR)/bin/pip
 NPM = npm
@@ -19,27 +20,52 @@ setup-venv:
 	@if [ ! -d "$(VENV_DIR)" ]; then $(PYTHON) -m venv $(VENV_DIR); fi
 	@echo "Installing Python dependencies..."
 	@$(PIP) install --upgrade pip
-	@$(PIP) install -r $(AI_SERVICE_DIR)dev-requirements.in
+	@$(PIP) install -r $(AI_SERVICE_DIR)/dev-requirements.in
 
 # Install Node.js dependencies for Electron App
 .PHONY: install-node-modules
 install-node-modules:
 	@echo "Installing Node.js dependencies..."
-	@cd $(ELECTRON_DIR) && $(NPM) install && $(NPM) install --save-dev vite @vitejs/plugin-react
+	@cd $(ELECTRON_DIR) && $(NPM) install
 	@cd $(ELECTRON_FRONTEND_DIR) && $(NPM) install 
 
 # Create shared directories
 .PHONY: create-shared-dirs
 create-shared-dirs:
 	@echo "Creating shared directories..."
-	@for dir in $(SHARED_DIRS); do \
-		if [ ! -d "$$dir" ]; then mkdir -p $$dir; fi; \
-	done
+	@mkdir -p $(COMPILED_BACKEND_DIR)
 
 # Initialize the environment (setup everything)
 .PHONY: init
 init: setup-venv install-node-modules create-shared-dirs
 	@echo "Environment setup completed!"
+
+# Compile the AI Service (Backend)
+.PHONY: compile-ai-service
+compile-ai-service:
+	@echo "Compiling backend with Nuitka..."
+	. $(VENV_DIR)/bin/activate && cd $(AI_SERVICE_DIR) && \
+	nuitka --standalone --include-package=websockets --include-package=websockets.asyncio.client \
+	       --output-dir=$(BIN_DIR) app/main.py
+
+# Copy compiled backend to Electron app directory
+.PHONY: build-backend
+build-backend: compile-ai-service
+	@echo "Copying compiled backend to Electron app directory..."
+	@mkdir -p $(COMPILED_BACKEND_DIR)
+	@cp -r $(AI_SERVICE_DIR)/$(BIN_DIR)/* $(COMPILED_BACKEND_DIR)
+
+# Build the Electron App (Frontend)
+.PHONY: build-electron
+build-electron: build-backend
+	@echo "Building the Electron app..."
+	@cd $(ELECTRON_DIR) && $(NPM) run build
+
+# Package the Electron App (with Backend)
+.PHONY: package
+package: build-electron
+	@echo "Packaging the Electron app..."
+	@cd $(ELECTRON_DIR) && $(NPM) run package
 
 # Ensure Ollama is running
 .PHONY: ensure-ollama
@@ -65,21 +91,24 @@ start-electron-app:
 	@echo "Starting Electron App..."
 	@cd $(ELECTRON_DIR) && $(NPM) run dev
 
-# Start both services
+# Start all services (Backend, Electron App, and Ollama)
 .PHONY: start-all
 start-all:
-	@echo "Starting both services concurrently..."
+	@echo "Starting all services..."
 	@make ensure-ollama && \
 	(. $(VENV_DIR)/bin/activate && PYTHONPATH=$(shell pwd)/$(AI_SERVICE_DIR) $(PYTHON) $(AI_SERVICE_DIR)/app/main.py) & \
 	(cd $(ELECTRON_DIR) && $(NPM) start)
 
-# Clean up environment
+# Clean up build artifacts
 .PHONY: clean
 clean:
-	@echo "Cleaning up environment..."
+	@echo "Cleaning up environment and build artifacts..."
 	@rm -rf $(VENV_DIR)
 	@rm -rf $(ELECTRON_DIR)/node_modules
-	@for dir in $(SHARED_DIRS); do rm -rf $$dir/*; done
+	@rm -rf $(COMPILED_BACKEND_DIR)
+	@rm -rf $(AI_SERVICE_DIR)/$(BIN_DIR)
+	@cd $(AI_SERVICE_DIR) && make clean
+	@cd $(ELECTRON_DIR) && $(NPM) run clean
 	@echo "Clean up completed!"
 
 # Generate a directory tree excluding node_modules, venv, and __pycache__
