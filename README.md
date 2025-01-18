@@ -1,25 +1,25 @@
-# Cadmium
+# Neocadmium
 
-Cadmium started as a personal project to make backend development less painful. Now it's grown into a powerful toolkit that combines log analysis, AI capabilities, and a clean interface to help developers work smarter.
+Neocadmium started as a personal project to make backend development less painful. Now it's grown into a powerful toolkit that combines log analysis, AI capabilities, and a clean interface to help developers work smarter.
 
 ## What makes it special?
-Cadmium brings together three key innovations:
+Neocadmium brings together three key innovations:
 - A graph-based system for parsing and understanding logs
 - Custom-trained local AI models that actually understand your code
 - RAG (Retrieve-and-Generate) services that make sense of your development context
 
 ## Watch it in action
-[![Cadmium Demo](https://img.youtube.com/vi/dBCNhqX9KmI/maxresdefault.jpg)](https://youtu.be/dBCNhqX9KmI)
+[![Neocadmium Demo](https://img.youtube.com/vi/dBCNhqX9KmI/maxresdefault.jpg)](https://youtu.be/dBCNhqX9KmI)
 
-Want to see how it all comes together? Check out our latest demo where we walk through real-world examples of Cadmium helping developers track down tricky bugs and optimize their workflow.
+Want to see how it all comes together? Check out our latest demo where we walk through real-world examples of Neocadmium helping developers track down tricky bugs and optimize their workflow.
 
 ## Core Features
 
 ### Smart Log Analysis
-We've built a graph-based system that helps you navigate even the most complex codebases. When something goes wrong, Cadmium helps you trace the issue through your logs with visual tools and AI-powered insights.
+We've built a graph-based system that helps you navigate even the most complex codebases. When something goes wrong, Neocadmium helps you trace the issue through your logs with visual tools and AI-powered insights.
 
 ### AI Under the Hood
-Cadmium runs on locally-trained AI models that we've optimized specifically for understanding code and logs. Need more horsepower? We integrate smoothly with OpenAI, Ollama, and Anthropic's APIs.
+Neocadmium runs on locally-trained AI models that we've optimized specifically for understanding code and logs. Need more horsepower? We integrate smoothly with OpenAI, Ollama, and Anthropic's APIs.
 
 ### Clean, Fast Interface
 The frontend is built in React and packaged as an Electron app, giving you a snappy desktop experience with real-time log viewing and interactive dashboards.
@@ -56,7 +56,7 @@ Make sure you have:
 1. Clone it:
 ```bash
 git clone <repository_url>
-cd cadmium
+cd Neocadmium
 ```
 
 2. Install what you need:
@@ -123,7 +123,7 @@ npm run lint
 4. Automated testing and deployment pipeline
 
 ## The Story So Far
-Cadmium began as a way to make backend development less frustrating. We've hit some cool milestones along the way:
+Neocadmium began as a way to make backend development less frustrating. We've hit some cool milestones along the way:
 - Built a graph system that actually makes sense of code
 - Trained AI models that understand logs like developers do
 - Created an interface that doesn't get in your way
