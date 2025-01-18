@@ -97,7 +97,7 @@ start-all:
 	@echo "Starting all services..."
 	@make ensure-ollama && \
 	(. $(VENV_DIR)/bin/activate && PYTHONPATH=$(shell pwd)/$(AI_SERVICE_DIR) $(PYTHON) $(AI_SERVICE_DIR)/app/main.py) & \
-	(cd $(ELECTRON_DIR) && $(NPM) start)
+	(cd $(ELECTRON_DIR) && $(NPM) run dev)
 
 # Clean up build artifacts
 .PHONY: clean
