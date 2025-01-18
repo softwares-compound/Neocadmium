@@ -1,0 +1,6 @@
+[submodule "electron-app"]
+	path = electron-app
+	url = git@github.com:softwares-compound/Neocadmium-desktop.git
+[submodule "ai-service"]
+	path = ai-service
+	url = git@github.com:softwares-compound/Neocadmium-ai-service.git
