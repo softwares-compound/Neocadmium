@@ -123,3 +123,13 @@ print-tree:
 install-dependencies:
 	@echo "Running dependency installation script..."
 	@bash scripts/install_dependencies.sh
+
+# Fetch and sync the repository and submodules
+.PHONY: fetch
+fetch:
+	@echo "Fetching latest changes from remote..."
+	@git pull --recurse-submodules
+	@git submodule update --recursive --remote
+	@git submodule foreach --recursive git checkout develop
+	@git submodule foreach --recursive git pull origin develop
+	@echo "Repository and submodules synced with remote."
