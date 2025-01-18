@@ -32,7 +32,7 @@ desktop.ini         # Windows desktop file
 .vscode/            # VS Code configs
 
 # Environment files
-.env                # Environment variables file
+
 venv/
 
 # Temporary files
@@ -49,3 +49,9 @@ ollama.log          # Ollama service log
 .coverage           # Coverage report
 coverage.xml        # Coverage report XML
 htmlcov/            # HTML coverage output
+
+
+.env      
+db/  
+storage/
+target-codebases/       
