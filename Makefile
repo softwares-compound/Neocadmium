@@ -1,3 +1,4 @@
+
 # Variables
 VENV_DIR = venv
 AI_SERVICE_DIR = ai-service
@@ -6,7 +7,7 @@ PIP = $(VENV_DIR)/bin/pip
 ELECTRON_DIR = electron-app
 ELECTRON_FRONTEND_DIR = $(ELECTRON_DIR)/cadmium-frontend
 COMPILED_BACKEND_DIR = $(ELECTRON_DIR)/compiled-backend
-BIN_DIR = bin  # Output directory for compiled backend
+BIN_DIR = dist  # Output directory for compiled backend
 
 # Commands
 PYTHON = python3
@@ -40,13 +41,12 @@ create-shared-dirs:
 init: setup-venv install-node-modules create-shared-dirs
 	@echo "Environment setup completed!"
 
-# Compile the AI Service (Backend)
+# Compile the AI Service (Backend) with PyInstaller
 .PHONY: compile-ai-service
 compile-ai-service:
-	@echo "Compiling backend with Nuitka..."
+	@echo "Compiling backend with PyInstaller..."
 	. $(VENV_DIR)/bin/activate && cd $(AI_SERVICE_DIR) && \
-	nuitka --standalone --include-package=websockets --include-package=websockets.asyncio.client \
-	       --output-dir=$(BIN_DIR) app/main.py
+	pyinstaller --onefile --name=ai-service --distpath=$(BIN_DIR) --clean app/main.py
 
 # Copy compiled backend to Electron app directory
 .PHONY: build-backend
@@ -133,3 +133,35 @@ fetch:
 	@git submodule foreach --recursive git checkout develop
 	@git submodule foreach --recursive git pull origin develop
 	@echo "Repository and submodules synced with remote."
+
+# Compile the AI Service (Backend) with PyInstaller for macOS
+.PHONY: compile-ai-service-mac
+compile-ai-service-mac:
+	@echo "Compiling backend with PyInstaller for macOS..."
+	. $(VENV_DIR)/bin/activate && cd $(AI_SERVICE_DIR) && \
+	pyinstaller --onefile --name=ai-service --distpath=$(BIN_DIR) --clean app/main.py
+	
+# Copy compiled backend to Electron app directory for macOS
+.PHONY: copy-backend-mac
+copy-backend-mac: compile-ai-service-mac
+	@echo "Copying compiled backend to Electron app directory for macOS..."
+	@mkdir -p $(ELECTRON_DIR)/out/compiled-backend
+	@if [ -f "$(AI_SERVICE_DIR)/dist/ai-service" ]; then \
+		cp "$(AI_SERVICE_DIR)/dist/ai-service" "$(ELECTRON_DIR)/out/compiled-backend/ai-service"; \
+		echo "✅ Successfully copied ai-service to $(ELECTRON_DIR)/out/compiled-backend/"; \
+	else \
+		echo "❌ Error: ai-service binary not found! Check PyInstaller output."; \
+		exit 1; \
+	fi
+
+
+# Build the Electron App (Frontend) for macOS
+.PHONY: build-electron-mac
+build-electron-mac: copy-backend-mac
+	@echo "Building the Electron app for macOS..."
+	@cd $(ELECTRON_DIR) && npm run build:mac
+
+# Final macOS build command
+.PHONY: build-mac
+build-mac: build-electron-mac
+	@echo "macOS build complete!"
