@@ -140,4 +140,4 @@ We'd love your input! Here's how:
 MIT Licensed. See the [LICENSE](LICENSE) file for the fine print.
 
 ## Questions?
-Reach out to Ben at [bannawandoor@gmail.com](mailto:bannawandoor@gmail.com) or  [amarkumar.sharma.124@gmail.com](mailto:amarkumar.sharma.124@gmail.com)
+Reach out to Ben at [bannawandoor@gmail.com](mailto:bannawandoor@gmail.com) or to Amar at [amarkumar.sharma.124@gmail.com](mailto:amarkumar.sharma.124@gmail.com)
